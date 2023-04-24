@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor /*生成无参构造函数*/
 @AllArgsConstructor /*生成有参构造函数*/
 public class User {
+    String id;
     String name;
     String address;
     String sex;
@@ -15,7 +16,6 @@ public class User {
     String qq;
     String account;
     String password;
-    String id;
     int age;
     int id_sort;
 }
