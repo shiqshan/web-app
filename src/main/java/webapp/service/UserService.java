@@ -1,6 +1,5 @@
 package webapp.service;
 
-import webapp.common.Result;
 import webapp.pojo.User;
 
 public interface UserService {
