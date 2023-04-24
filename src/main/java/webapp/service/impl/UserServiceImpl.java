@@ -6,6 +6,9 @@ import webapp.mapper.UserMapper;
 import webapp.pojo.User;
 import webapp.service.UserService;
 
+import java.util.List;
+
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -43,6 +46,11 @@ public class UserServiceImpl implements UserService {
             return 0;
         }
         return userMapper.updateUser(user);
+    }
+
+    @Override
+    public List getUsers() {
+        return userMapper.getUsers();
     }
 }
 

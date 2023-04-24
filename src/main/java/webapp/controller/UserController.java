@@ -8,6 +8,8 @@ import webapp.common.ResultGenerator;
 import webapp.pojo.User;
 import webapp.service.impl.UserServiceImpl;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -54,14 +56,14 @@ public class UserController {
      * @return
      */
     @PostMapping("/insertUser")
-    public Result<Number> insertUser(@RequestBody User user) {
+    public Result insertUser(@RequestBody User user) {
         System.out.println(user);
         if (StringUtils.isEmpty(user.getName()) || StringUtils.isEmpty(user.getId())) {
             return ResultGenerator.errorResult(0, "缺少参数");
         }
         int u = userService.insertUser(user);
         if (u > 0) {
-            return ResultGenerator.successResult(1);
+            return ResultGenerator.successResult();
         }
         return ResultGenerator.errorResult(0, "User already exists");
     }
@@ -73,10 +75,10 @@ public class UserController {
      * @return
      */
     @PostMapping("/deleteUser")
-    public Result<Number> deleteUser(@RequestBody User user) {
+    public Result deleteUser(@RequestBody User user) {
         int u = userService.deleteUser(user.getId());
         if (u > 0) {
-            return ResultGenerator.successResult(1);
+            return ResultGenerator.successResult();
         }
         return ResultGenerator.errorResult(0, "User does not exists");
     }
@@ -88,14 +90,25 @@ public class UserController {
      * @return
      */
     @PostMapping("/updateUser")
-    public Result<Number> updateUser(@RequestBody User user) {
-        if (user.getId() == null) {
+    public Result updateUser(@RequestBody User user) {
+        if (StringUtils.isEmpty(user.getId())) {
             return ResultGenerator.errorResult(0, "id in bodyParam does not exist");
         }
         int u = userService.updateUser(user);
         if (u > 0) {
-            return ResultGenerator.successResult(1);
+            return ResultGenerator.successResult();
         }
         return ResultGenerator.errorResult(0, "update failed");
+    }
+
+    /**
+     * 查询所有用户
+     *
+     * @return
+     */
+    @GetMapping("/getUserList")
+    public Result<List<User>> getUsers() {
+        List list = userService.getUsers();
+        return ResultGenerator.successResult(list);
     }
 }
