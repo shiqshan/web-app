@@ -15,4 +15,6 @@ public interface UserService {
     Integer updateUser(User user);
 
     List getUsers();
+
+    User findUserByNameAndPwd(String username, String password);
 }

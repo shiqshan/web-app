@@ -19,4 +19,6 @@ public interface UserMapper {
     int updateUser(User user);
 
     List getUsers();
+
+    User findUserByNameAndPwd(String name, String password);
 }

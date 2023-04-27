@@ -32,4 +32,8 @@
     <select id="getUsers" resultType="User">
         select * from user
     </select>
+
+    <select id="findUserByNameAndPwd" resultType="User">
+        select * from user where name = #{name} and password = #{password}
+    </select>
 </mapper>

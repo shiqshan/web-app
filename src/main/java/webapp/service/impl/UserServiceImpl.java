@@ -52,5 +52,10 @@ public class UserServiceImpl implements UserService {
     public List getUsers() {
         return userMapper.getUsers();
     }
+
+    @Override
+    public User findUserByNameAndPwd(String username, String password) {
+        return userMapper.findUserByNameAndPwd(username, password);
+    }
 }
 

@@ -1,5 +1,7 @@
 package webapp.controller;
 
+import com.alibaba.fastjson2.JSONObject;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +28,25 @@ public class UserController {
         u.setAge(40);
         u.setId_sort(1);
         return u.toString();
+    }
+
+    /**
+     * 根据用户名和密码登录
+     *
+     * @param session
+     * @param body:   username, password
+     * @return
+     */
+    @PostMapping("/login")
+    public Result userLogin(HttpSession session, @RequestBody JSONObject body) {
+        String username = body.getString("username");
+        String password = body.getString("password");
+        User u = userService.findUserByNameAndPwd(username, password);
+        if (u != null) {
+            session.setAttribute("8080userInfo", u);
+            return ResultGenerator.successResult(u);
+        }
+        return ResultGenerator.nullResult("用户名和密码错误");
     }
 
 
