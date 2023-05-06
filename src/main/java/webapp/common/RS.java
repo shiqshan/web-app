@@ -2,7 +2,7 @@ package webapp.common;
 
 import org.springframework.util.StringUtils;
 
-public class ResultGenerator {
+public class RS {
     private static final String DEFAULT_SUCCESS_MESSAGE = "success";
     private static final String DEFAULT_ERROR_MESSAGE = "error";
 

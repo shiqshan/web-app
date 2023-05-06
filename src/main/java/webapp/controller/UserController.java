@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import webapp.common.Result;
-import webapp.common.ResultGenerator;
+import webapp.common.RS;
 import webapp.pojo.User;
 import webapp.service.impl.UserServiceImpl;
 
@@ -43,10 +43,10 @@ public class UserController {
         String password = body.getString("password");
         User u = userService.findUserByNameAndPwd(username, password);
         if (u != null) {
-            session.setAttribute("8080userInfo", u);
-            return ResultGenerator.successResult(u);
+            session.setAttribute("uid", u.getId());
+            return RS.successResult(u);
         }
-        return ResultGenerator.nullResult("用户名和密码错误");
+        return RS.nullResult("用户名和密码错误");
     }
 
 
@@ -59,10 +59,7 @@ public class UserController {
     @GetMapping("/getUserById")  // user/getUser?id=622301199608167353
     public Result<User> getUser(@RequestParam(value = "id") String id) {
         User u = userService.getUserById(id);
-        if (null == u) {
-            return ResultGenerator.nullResult("无数据");
-        }
-        return ResultGenerator.successResult(u);
+        return RS.successResult(u);
     }
 
     @GetMapping("/getUserById/{id}")  // user/getById/622301199608167353
@@ -80,13 +77,13 @@ public class UserController {
     public Result insertUser(@RequestBody User user) {
         System.out.println(user);
         if (StringUtils.isEmpty(user.getName()) || StringUtils.isEmpty(user.getId())) {
-            return ResultGenerator.errorResult(0, "缺少参数");
+            return RS.errorResult(0, "缺少参数");
         }
         int u = userService.insertUser(user);
         if (u > 0) {
-            return ResultGenerator.successResult();
+            return RS.successResult();
         }
-        return ResultGenerator.errorResult(0, "User already exists");
+        return RS.errorResult(0, "User already exists");
     }
 
     /**
@@ -99,9 +96,9 @@ public class UserController {
     public Result deleteUser(@RequestBody User user) {
         int u = userService.deleteUser(user.getId());
         if (u > 0) {
-            return ResultGenerator.successResult();
+            return RS.successResult();
         }
-        return ResultGenerator.errorResult(0, "User does not exists");
+        return RS.errorResult(0, "User does not exists");
     }
 
     /**
@@ -113,13 +110,13 @@ public class UserController {
     @PostMapping("/updateUser")
     public Result updateUser(@RequestBody User user) {
         if (StringUtils.isEmpty(user.getId())) {
-            return ResultGenerator.errorResult(0, "id in bodyParam does not exist");
+            return RS.errorResult(0, "id in bodyParam does not exist");
         }
         int u = userService.updateUser(user);
         if (u > 0) {
-            return ResultGenerator.successResult();
+            return RS.successResult();
         }
-        return ResultGenerator.errorResult(0, "update failed");
+        return RS.errorResult(0, "update failed");
     }
 
     /**
@@ -130,6 +127,6 @@ public class UserController {
     @GetMapping("/getUserList")
     public Result<List<User>> getUsers() {
         List list = userService.getUsers();
-        return ResultGenerator.successResult(list);
+        return RS.successResult(list);
     }
 }
