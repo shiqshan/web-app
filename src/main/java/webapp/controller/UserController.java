@@ -83,7 +83,7 @@ public class UserController {
         if (u > 0) {
             return RS.successResult();
         }
-        return RS.errorResult(0, "User already exists");
+        return RS.errorResult(0, "用户已存在");
     }
 
     /**
@@ -98,7 +98,7 @@ public class UserController {
         if (u > 0) {
             return RS.successResult();
         }
-        return RS.errorResult(0, "User does not exists");
+        return RS.errorResult(0, "用户不存在");
     }
 
     /**
@@ -116,7 +116,7 @@ public class UserController {
         if (u > 0) {
             return RS.successResult();
         }
-        return RS.errorResult(0, "update failed");
+        return RS.errorResult(0, "更新失败");
     }
 
     /**
