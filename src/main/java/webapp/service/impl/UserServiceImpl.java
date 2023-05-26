@@ -1,5 +1,8 @@
 package webapp.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import webapp.mapper.UserMapper;
@@ -49,13 +52,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List getUsers() {
-        return userMapper.getUsers();
+    public PageInfo<User> getUsers(Integer page, Integer size, String name, String phone) {
+        PageHelper.startPage(page, size);
+        List<User> users = userMapper.selectUserByPage(name, phone);
+        PageInfo<User> pageInfo = new PageInfo<>(users);
+        pageInfo.setPageSize(size);
+        return pageInfo;
     }
 
     @Override
     public User findUserByNameAndPwd(String username, String password) {
         return userMapper.findUserByNameAndPwd(username, password);
+    }
+
+    @Override
+    public Integer getTotal() {
+        return userMapper.getTotal();
     }
 }
 

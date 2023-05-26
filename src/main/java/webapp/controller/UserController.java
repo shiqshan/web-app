@@ -1,16 +1,20 @@
 package webapp.controller;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.github.pagehelper.PageInfo;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import webapp.common.Result;
 import webapp.common.RS;
+import webapp.common.Utils;
 import webapp.pojo.User;
 import webapp.service.impl.UserServiceImpl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user")
@@ -81,7 +85,7 @@ public class UserController {
         }
         int u = userService.insertUser(user);
         if (u > 0) {
-            return RS.successResult();
+            return RS.successResult(user);
         }
         return RS.errorResult(0, "用户已存在");
     }
@@ -124,9 +128,13 @@ public class UserController {
      *
      * @return
      */
-    @GetMapping("/getUserList")
-    public Result<List<User>> getUsers() {
-        List list = userService.getUsers();
-        return RS.successResult(list);
+    @PostMapping("/getUserList")
+    public Result<List<User>> getUsers(@RequestBody JSONObject body) {
+        Integer page = body.getIntValue("page");
+        Integer size = body.getIntValue("size");
+        String  name = body.getString("name");
+        String phone = body.getString("tel_number");
+        PageInfo pageInfo = userService.getUsers(page, size, name, phone);
+        return RS.successResult(Utils.wrapPageInfo(pageInfo));
     }
 }

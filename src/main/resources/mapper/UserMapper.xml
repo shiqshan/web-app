@@ -29,8 +29,24 @@
         where id = #{id}
     </update>
 
-    <select id="getUsers" resultType="User">
-        select * from user
+    <select id="selectUserByPage" resultType="User">
+        select * from user where 1=1
+        <if test="name != null and name.trim().length() > 0">
+            and name LIKE CONCAT('%', #{name}, '%')
+        </if>
+        <if test="phone != null and phone.trim().length() > 0">
+            and tel_number LIKE CONCAT('%', #{phone}, '%')
+        </if>
+        <if test="name == null or name.isEmpty()">
+            AND name LIKE '%%'
+        </if>
+        <if test="phone == null or phone.isEmpty()">
+            AND tel_number LIKE '%%'
+        </if>
+    </select>
+
+    <select id="getTotal" resultType="int">
+        select COUNT(*) from user;
     </select>
 
     <select id="findUserByNameAndPwd" resultType="User">
