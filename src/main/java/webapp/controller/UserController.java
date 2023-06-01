@@ -12,9 +12,7 @@ import webapp.common.Utils;
 import webapp.pojo.User;
 import webapp.service.impl.UserServiceImpl;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user")
@@ -132,9 +130,10 @@ public class UserController {
     public Result<List<User>> getUsers(@RequestBody JSONObject body) {
         Integer page = body.getIntValue("page");
         Integer size = body.getIntValue("size");
-        String  name = body.getString("name");
+        String name = body.getString("name");
         String phone = body.getString("tel_number");
-        PageInfo pageInfo = userService.getUsers(page, size, name, phone);
-        return RS.successResult(Utils.wrapPageInfo(pageInfo));
+        String sex = body.getString("sex");
+        PageInfo pageInfo = userService.getUsers(page, size, name, phone, sex);
+        return RS.successResult(Utils.simplePageInfo(pageInfo));
     }
 }

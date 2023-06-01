@@ -9,6 +9,8 @@ import webapp.mapper.UserMapper;
 import webapp.pojo.User;
 import webapp.service.UserService;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 
@@ -30,6 +32,9 @@ public class UserServiceImpl implements UserService {
         if (u != null) {
             return 0;
         }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String time = sdf.format(new Date());
+        user.setCreateTime(time);
         return userMapper.insertUser(user);
     }
 
@@ -52,11 +57,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PageInfo<User> getUsers(Integer page, Integer size, String name, String phone) {
+    public PageInfo<User> getUsers(Integer page, Integer size, String name, String phone, String sex) {
         PageHelper.startPage(page, size);
-        List<User> users = userMapper.selectUserByPage(name, phone);
+        List<User> users = userMapper.selectUserByPage(name, phone, sex);
         PageInfo<User> pageInfo = new PageInfo<>(users);
-        pageInfo.setPageSize(size);
         return pageInfo;
     }
 

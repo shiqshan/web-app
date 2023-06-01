@@ -16,6 +16,7 @@ public class User {
     String qq;
     String account;
     String password;
+    String createTime;
     int age;
     int id_sort;
 }

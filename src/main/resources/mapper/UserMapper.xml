@@ -2,10 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="webapp.mapper.UserMapper">
 
+    <!-- 定义 resultMap 映射 -->
+    <resultMap id="userMap" type="User">
+        <id property="id" column="id"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
     <insert id="insertUser" parameterType="User">
         insert into user
-        (id, name, age, address, sex, id_sort, tel_number, qq, account, password)
-        values (#{id}, #{name}, #{age}, #{address}, #{sex}, #{id_sort}, #{tel_number}, #{qq}, #{account}, #{password})
+        (id, name, age, address, sex, tel_number, qq, account, password, create_time)
+        values (#{id}, #{name}, #{age}, #{address}, #{sex}, #{tel_number}, #{qq}, #{account}, #{password}, #{createTime})
     </insert>
 
     <select id="getUserById" resultType="User">
@@ -29,7 +35,7 @@
         where id = #{id}
     </update>
 
-    <select id="selectUserByPage" resultType="User">
+    <select id="selectUserByPage" resultType="User" resultMap="userMap">
         select * from user where 1=1
         <if test="name != null and name.trim().length() > 0">
             and name LIKE CONCAT('%', #{name}, '%')
@@ -37,12 +43,10 @@
         <if test="phone != null and phone.trim().length() > 0">
             and tel_number LIKE CONCAT('%', #{phone}, '%')
         </if>
-        <if test="name == null or name.isEmpty()">
-            AND name LIKE '%%'
+        <if test="sex != null and sex.trim().length() > 0">
+            and sex = #{sex}
         </if>
-        <if test="phone == null or phone.isEmpty()">
-            AND tel_number LIKE '%%'
-        </if>
+        order by id_sort desc
     </select>
 
     <select id="getTotal" resultType="int">

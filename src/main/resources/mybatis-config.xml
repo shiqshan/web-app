@@ -4,6 +4,15 @@
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+            <!-- 配置属性 -->
+            <property name="helperDialect" value="mysql"/>
+            <property name="reasonable" value="true"/>
+            <property name="supportMethodsArguments" value="true"/>
+        </plugin>
+    </plugins>
+
     <!--设置连接数据库的环境-->
     <environments default="development">
         <environment id="development">
@@ -19,6 +28,7 @@
     <!--引入映射文件-->
     <mappers>
         <mapper resource="mapper/UserMapper.xml"/>
-<!--        <package name="webapp.mapper"/>-->
+        <!--        <package name="webapp.mapper"/>-->
     </mappers>
+
 </configuration>

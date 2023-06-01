@@ -15,7 +15,7 @@ public interface UserService {
 
     Integer updateUser(User user);
 
-    PageInfo<User> getUsers(Integer page, Integer size, String name, String phone);
+    PageInfo<User> getUsers(Integer page, Integer size, String name, String phone, String sex);
 
     User findUserByNameAndPwd(String username, String password);
 

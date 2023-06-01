@@ -1,6 +1,5 @@
 package webapp.mapper;
 
-import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import webapp.pojo.User;
@@ -18,7 +17,7 @@ public interface UserMapper {
 
     int updateUser(User user);
 
-    List<User> selectUserByPage(@Param("name") String name, @Param("phone") String phone);
+    List<User> selectUserByPage(@Param("name") String name, @Param("phone") String phone, @Param("sex") String sex);
 
     User findUserByNameAndPwd(String name, String password);
 

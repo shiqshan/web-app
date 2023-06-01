@@ -5,7 +5,7 @@ import com.github.pagehelper.PageInfo;
 
 public class Utils {
 
-    public static JSONObject wrapPageInfo(PageInfo pageInfo) {
+    public static JSONObject simplePageInfo(PageInfo pageInfo) {
         JSONObject result = new JSONObject();
         result.put("page", pageInfo.getPageNum());
         result.put("total", pageInfo.getTotal());
