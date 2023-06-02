@@ -2,6 +2,7 @@ package webapp.controller;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.github.pagehelper.PageInfo;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -35,20 +36,33 @@ public class UserController {
     /**
      * 根据用户名和密码登录
      *
-     * @param session
+     * @param request
      * @param body:   username, password
      * @return
      */
     @PostMapping("/login")
-    public Result userLogin(HttpSession session, @RequestBody JSONObject body) {
+    public Result userLogin(HttpServletRequest request, @RequestBody JSONObject body) {
         String username = body.getString("username");
         String password = body.getString("password");
         User u = userService.findUserByNameAndPwd(username, password);
         if (u != null) {
-            session.setAttribute("uid", u.getId());
+            HttpSession session = request.getSession();
+            session.setAttribute("user", u);
             return RS.successResult(u);
         }
         return RS.nullResult("用户名和密码错误");
+    }
+
+    /**
+     * 退出登录
+     *
+     * @param session
+     * @return
+     */
+    @GetMapping("/logout")
+    public Result logout(HttpSession session) {
+        session.removeAttribute("user");
+        return RS.successResult("已退出登录");
     }
 
 
