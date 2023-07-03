@@ -41,7 +41,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/login")
-    public Result userLogin(HttpServletRequest request, @RequestBody JSONObject body) {
+    public Result<User> userLogin(HttpServletRequest request, @RequestBody JSONObject body) {
         String username = body.getString("username");
         String password = body.getString("password");
         User u = userService.findUserByNameAndPwd(username, password);
@@ -50,7 +50,7 @@ public class UserController {
             session.setAttribute("user", u);
             return RS.successResult(u);
         }
-        return RS.nullResult("用户名和密码错误");
+        return RS.errorResult("用户名和密码错误");
     }
 
     /**

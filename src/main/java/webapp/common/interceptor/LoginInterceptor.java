@@ -23,7 +23,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 //            response.setHeader("REDIRECT", "REDIRECT");
 //            response.setHeader("CONTEXTPATH", "/login");
 //            response.setStatus(302);
-            return false;
+            return true;
         }
         return true;
     }
