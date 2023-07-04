@@ -9,14 +9,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor /*生成有参构造函数*/
 public class User {
     String id;
-    String name;
+    String username;
+    String password;
+    String nickname;
     String address;
     String sex;
     String tel_number;
     String qq;
-    String account;
-    String password;
     String createTime;
-    int age;
+    String avatar;
+    String age;
     int id_sort;
+    int isDelete;
 }

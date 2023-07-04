@@ -54,6 +54,15 @@
     </select>
 
     <select id="findUserByNameAndPwd" resultType="User">
-        select * from user where name = #{name} and password = #{password}
+        select * from user where username = #{username} and password = #{password}
     </select>
+
+    <select id="findUserByUsername" resultType="User">
+        select * from user where username = #{username}
+    </select>
+
+    <insert id="register" parameterType="User">
+        insert into user(id, username, password, nickname, age, address, sex, tel_number, qq, create_time, is_delete)
+        values (null, #{username}, #{password}, null, null, null, null, null, null, CURRENT_TIMESTAMP, 0)
+    </insert>
 </mapper>

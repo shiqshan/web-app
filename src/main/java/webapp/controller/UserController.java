@@ -22,15 +22,23 @@ public class UserController {
     @Autowired
     private UserServiceImpl userService;
 
-    @GetMapping("/info")
-    public String getUserInfo() {
-        User u = new User();
-        u.setName("李云龙");
-        u.setAddress("独立团");
-        u.setSex("男");
-        u.setAge(40);
-        u.setId_sort(1);
-        return u.toString();
+    @PostMapping("/check")
+    public Result check(@RequestBody JSONObject body) {
+        String username = body.getString("username");
+        if (StringUtils.isEmpty(username)) {
+            return RS.errorResult(400, "参数错误");
+        }
+        return userService.check(username);
+    }
+
+    @PostMapping("/register")
+    public Result register(@RequestBody JSONObject body) {
+        String username = body.getString("username");
+        String password = body.getString("password");
+        if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
+            return RS.errorResult(400, "参数错误");
+        }
+        return userService.register(username, password);
     }
 
     /**
@@ -44,10 +52,13 @@ public class UserController {
     public Result<User> userLogin(HttpServletRequest request, @RequestBody JSONObject body) {
         String username = body.getString("username");
         String password = body.getString("password");
+        if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
+            return RS.errorResult(400, "参数错误");
+        }
         User u = userService.findUserByNameAndPwd(username, password);
         if (u != null) {
             HttpSession session = request.getSession();
-            session.setAttribute("user", u);
+            session.setAttribute("u_id", u.getId());
             return RS.successResult(u);
         }
         return RS.errorResult("用户名和密码错误");
@@ -61,7 +72,7 @@ public class UserController {
      */
     @GetMapping("/logout")
     public Result logout(HttpSession session) {
-        session.removeAttribute("user");
+        session.removeAttribute("u_id");
         return RS.successResult("已退出登录");
     }
 
@@ -92,8 +103,8 @@ public class UserController {
     @PostMapping("/insertUser")
     public Result insertUser(@RequestBody User user) {
         System.out.println(user);
-        if (StringUtils.isEmpty(user.getName()) || StringUtils.isEmpty(user.getId())) {
-            return RS.errorResult(0, "缺少参数");
+        if (StringUtils.isEmpty(user.getUsername()) || StringUtils.isEmpty(user.getId())) {
+            return RS.errorResult(400, "参数错误");
         }
         int u = userService.insertUser(user);
         if (u > 0) {
