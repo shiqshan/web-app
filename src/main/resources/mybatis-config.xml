@@ -28,6 +28,7 @@
     <!--引入映射文件-->
     <mappers>
         <mapper resource="mapper/UserMapper.xml"/>
+        <mapper resource="mapper/OrderMapper.xml"/>
         <!--        <package name="webapp.mapper"/>-->
     </mappers>
 

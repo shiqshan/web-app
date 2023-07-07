@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="webapp.mapper.OrderMapper">
+
+    <!-- 定义 resultMap 映射 -->
+    <resultMap id="OrderMap" type="Order">
+        <id property="id" column="id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="uId" column="u_id"/>
+        <result property="pId" column="p_id"/>
+    </resultMap>
+
+    <insert id="addOrder" parameterType="Order">
+        insert into `order` (id, u_id, p_id, create_time, pay)
+        values (null, #{uId}, #{pId}, CURRENT_TIMESTAMP, #{pay})
+    </insert>
+
+</mapper>
