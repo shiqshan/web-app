@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 import webapp.common.RS;
 import webapp.common.Result;
 import webapp.mapper.UserMapper;
@@ -12,7 +13,9 @@ import webapp.service.UserService;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -66,8 +69,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findUserByNameAndPwd(String username, String password) {
-        return userMapper.findUserByNameAndPwd(username, password);
+    public HashMap<String, String> findUserByNameAndPwd(String username, String password) {
+        User u = userMapper.findUserByNameAndPwd(username, password);
+        HashMap<String, String> map = new HashMap<String, String>();
+        if (u != null) {
+            map.put("id", u.getId());
+            map.put("username", u.getUsername());
+            map.put("nickname", u.getNickname());
+            map.put("avatar", u.getAvatar());
+        }
+        return map;
     }
 
     @Override
@@ -75,14 +86,15 @@ public class UserServiceImpl implements UserService {
         //查询账号是否存在
         User u = userMapper.findUserByUsername(username);
         if (u != null) {
-            return RS.errorResult(0, "该账号已注册");
+            return RS.error(0, "该账号已注册");
         }
         //注册
-        int i = userMapper.register(username, password);
+        String md5 = DigestUtils.md5DigestAsHex(password.getBytes());
+        int i = userMapper.register(username, md5);
         if (i > 0) {
-            return RS.successResult();
+            return RS.success();
         }
-        return RS.errorResult("注册失败");
+        return RS.error("注册失败");
     }
 
     @Override
@@ -90,9 +102,9 @@ public class UserServiceImpl implements UserService {
         User u = userMapper.findUserByUsername(username);
         // 1 不存在，可以注册  0已存在，不能注册
         if (u != null) {
-            return RS.successResult(0);
+            return RS.success(0);
         }
-        return RS.successResult(1);
+        return RS.success(1);
     }
 
     @Override

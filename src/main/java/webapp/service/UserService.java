@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import webapp.common.Result;
 import webapp.pojo.User;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface UserService {
@@ -18,7 +19,7 @@ public interface UserService {
 
     PageInfo<User> getUsers(Integer page, Integer size, String name, String phone, String sex);
 
-    User findUserByNameAndPwd(String username, String password);
+    HashMap<String, String> findUserByNameAndPwd(String username, String password);
 
     //用户注册
     Result register(String username, String password);

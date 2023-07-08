@@ -16,8 +16,8 @@ public class OrderServiceImpl implements OrderService {
     public Result add(String uId, String pId, String pay) {
         int i = orderMapper.addOrder(uId, pId, pay);
         if (i > 0) {
-            return RS.successResult();
+            return RS.success();
         }
-        return RS.errorResult("下单失败");
+        return RS.error("下单失败");
     }
 }

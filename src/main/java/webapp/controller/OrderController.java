@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import webapp.common.Constants;
 import webapp.common.RS;
 import webapp.common.Result;
 import webapp.pojo.Order;
@@ -26,11 +27,11 @@ public class OrderController {
         String pay = body.getString("pay");
 
         if (StringUtils.isEmpty(pId) || StringUtils.isEmpty(pay)) {
-            return RS.errorResult(400, "参数错误");
+            return RS.error(Constants.RESULT_CODE_PARAM_ERROR, "参数错误");
         }
         String uId = (String) session.getAttribute("u_id");
         if (uId == null) {
-            return RS.errorResult("未登录");
+            return RS.error(Constants.RESULT_CODE_NOT_LOGIN, "未登录");
         }
         return heroOrderService.add(uId, pId, pay);
     }
