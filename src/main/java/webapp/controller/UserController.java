@@ -166,4 +166,12 @@ public class UserController {
         PageInfo pageInfo = userService.getUsers(page, size, name, phone, sex);
         return RS.success(Utils.simplePageInfo(pageInfo));
     }
+
+    @GetMapping("checkSession")
+    public Result checkSession(HttpSession session) {
+        if (session.getAttribute("u_id") == null) {
+            return RS.error("未登录");
+        }
+        return RS.success(1);
+    }
 }
