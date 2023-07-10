@@ -70,8 +70,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public HashMap<String, String> findUserByNameAndPwd(String username, String password) {
-        User u = userMapper.findUserByNameAndPwd(username, password);
-        HashMap<String, String> map = new HashMap<String, String>();
+        String pwd = DigestUtils.md5DigestAsHex(password.getBytes());
+        User u = userMapper.findUserByNameAndPwd(username, pwd);
+        HashMap<String, String> map = new HashMap();
         if (u != null) {
             map.put("id", u.getId());
             map.put("username", u.getUsername());
@@ -98,13 +99,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Result check(String username) {
+    public Result isExist(String username) {
         User u = userMapper.findUserByUsername(username);
-        // 1 不存在，可以注册  0已存在，不能注册
+        // 1 存在  0不存在
         if (u != null) {
-            return RS.success(0);
+            return RS.success(1);
         }
-        return RS.success(1);
+        return RS.success(0);
+    }
+
+    @Override
+    public Result getInfoById(String userId) {
+        Map map = userMapper.getInfoById(userId);
+        return RS.success(map);
     }
 
     @Override

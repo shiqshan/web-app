@@ -25,7 +25,9 @@ public interface UserService {
     Result register(String username, String password);
 
     //检查账号
-    Result check(String username);
+    Result isExist(String username);
+
+    Result getInfoById(String userId);
 
     //获取用户总数
     Integer getTotal();

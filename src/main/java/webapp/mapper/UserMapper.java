@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Param;
 import webapp.pojo.User;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface UserMapper {
@@ -25,6 +26,9 @@ public interface UserMapper {
 
     //根据账号查用户
     User findUserByUsername(@Param("username") String username);
+
+    //根据id获取当前登录用户信息
+    Map<String, Object> getInfoById(@Param("id") String id);
 
     Integer getTotal();
 }

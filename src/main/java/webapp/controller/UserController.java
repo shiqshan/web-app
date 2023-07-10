@@ -5,7 +5,6 @@ import com.github.pagehelper.PageInfo;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import webapp.common.Constants;
@@ -26,13 +25,13 @@ public class UserController {
     @Autowired
     private UserServiceImpl userService;
 
-    @PostMapping("/check")
+    @PostMapping("/is_exist")
     public Result check(@RequestBody JSONObject body) {
         String username = body.getString("username");
         if (StringUtils.isEmpty(username)) {
             return RS.error(400, "参数错误");
         }
-        return userService.check(username);
+        return userService.isExist(username);
     }
 
     @PostMapping("/register")
@@ -59,7 +58,6 @@ public class UserController {
         if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
             return RS.error(Constants.RESULT_CODE_PARAM_ERROR, "参数错误");
         }
-        password = DigestUtils.md5DigestAsHex(password.getBytes());
         HashMap map = userService.findUserByNameAndPwd(username, password);
         if (map.isEmpty()) {
             return RS.error("用户名和密码错误");
@@ -80,6 +78,21 @@ public class UserController {
     public Result logout(HttpSession session) {
         session.removeAttribute("u_id");
         return RS.success("已退出登录");
+    }
+
+    /**
+     * 获取当前登录用户的信息
+     *
+     * @param session
+     * @return
+     */
+    @GetMapping("info")
+    public Result<User> getInfo(HttpSession session) {
+        String id = (String) session.getAttribute("u_id");
+        if (id == null) {
+            return RS.success("用户信息不存在，请重新登录");
+        }
+        return userService.getInfoById(id);
     }
 
     /**

@@ -6,20 +6,27 @@
     <resultMap id="userMap" type="User">
         <id property="id" column="id"/>
         <result property="createTime" column="create_time"/>
+        <!-- 不需要映射的列字段 -->
+        <!--        <discriminator javaType="String" column="password" />-->
     </resultMap>
 
     <insert id="insertUser" parameterType="User">
         insert into user
         (id, name, age, address, sex, tel_number, qq, account, password, create_time)
-        values (#{id}, #{name}, #{age}, #{address}, #{sex}, #{tel_number}, #{qq}, #{account}, #{password}, #{createTime})
+        values (#{id}, #{name}, #{age}, #{address}, #{sex}, #{tel_number}, #{qq}, #{account}, #{password},
+                #{createTime})
     </insert>
 
     <select id="getUserById" resultType="User">
-        select * from user where id = #{id}
+        select *
+        from user
+        where id = #{id}
     </select>
 
     <delete id="deleteUser">
-        delete from user where id = #{id}
+        delete
+        from user
+        where id = #{id}
     </delete>
 
     <update id="updateUser">
@@ -50,19 +57,39 @@
     </select>
 
     <select id="getTotal" resultType="int">
-        select COUNT(*) from user;
+        select COUNT(*)
+        from user;
     </select>
 
     <select id="findUserByNameAndPwd" resultType="User">
-        select * from user where username = #{username} and password = #{password}
+        select *
+        from user
+        where username = #{username}
+          and password = #{password}
     </select>
 
     <select id="findUserByUsername" resultType="User">
-        select * from user where username = #{username}
+        select *
+        from user
+        where username = #{username}
     </select>
 
     <insert id="register" parameterType="User">
         insert into user(id, username, password, nickname, age, address, sex, tel_number, qq, create_time, is_delete)
         values (null, #{username}, #{password}, null, null, null, null, null, null, CURRENT_TIMESTAMP, 0)
     </insert>
+
+    <select id="getInfoById" resultType="map">
+        select id,
+               username,
+               nickname,
+               age,
+               address,
+               sex,
+               tel_number,
+               qq,
+               create_time
+        from user
+        where id = #{id}
+    </select>
 </mapper>
