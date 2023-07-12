@@ -30,5 +30,5 @@ public interface UserMapper {
     //根据id获取当前登录用户信息
     Map<String, Object> getInfoById(@Param("id") String id);
 
-    Integer getTotal();
+    int update(User user);
 }

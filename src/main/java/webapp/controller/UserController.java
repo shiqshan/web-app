@@ -86,13 +86,30 @@ public class UserController {
      * @param session
      * @return
      */
-    @GetMapping("info")
+    @GetMapping("/info")
     public Result<User> getInfo(HttpSession session) {
         String id = (String) session.getAttribute("u_id");
         if (id == null) {
             return RS.success("用户信息不存在，请重新登录");
         }
         return userService.getInfoById(id);
+    }
+
+    /**
+     * 修改基本信息
+     *
+     * @param session
+     * @param user
+     * @return
+     */
+    @PostMapping("/update_baseinfo")
+    public Result updateBaseInfo(HttpSession session, @RequestBody User user) {
+        String id = (String) session.getAttribute("u_id");
+        if (id == null) {
+            return RS.success("用户信息不存在，请重新登录");
+        }
+        user.setId(id);
+        return userService.update(user);
     }
 
     /**

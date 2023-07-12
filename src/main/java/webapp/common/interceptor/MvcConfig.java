@@ -20,7 +20,9 @@ public class MvcConfig implements WebMvcConfigurer {
                         "/api/user/is_exist",
                         "/api/user/register",
                         "/api/user/logout",
-                        "/api/user/checkSession");
+                        "/api/user/checkSession",
+                        "/api/common/upload"
+                );
     }
 
 }

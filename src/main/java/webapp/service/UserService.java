@@ -29,6 +29,6 @@ public interface UserService {
 
     Result getInfoById(String userId);
 
-    //获取用户总数
-    Integer getTotal();
+    Result update(User user);
+
 }

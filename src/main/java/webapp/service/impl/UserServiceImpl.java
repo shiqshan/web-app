@@ -115,8 +115,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Integer getTotal() {
-        return userMapper.getTotal();
+    public Result update(User user) {
+        int i = userMapper.update(user);
+        if (i > 0) {
+            return RS.success("修改成功");
+        }
+        return RS.error("修改失败");
     }
 }
 
