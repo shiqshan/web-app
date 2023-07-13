@@ -12,8 +12,8 @@
 
     <insert id="insertUser" parameterType="User">
         insert into user
-        (id, name, age, address, sex, tel_number, qq, account, password, create_time)
-        values (#{id}, #{name}, #{age}, #{address}, #{sex}, #{tel_number}, #{qq}, #{account}, #{password},
+        (id, nickname, age, address, sex, tel_number, qq, password, create_time)
+        values (#{id}, #{name}, #{age}, #{address}, #{sex}, #{tel_number}, #{qq}, #{password},
                 #{createTime})
     </insert>
 
@@ -31,13 +31,12 @@
 
     <update id="updateUser">
         update user
-        set name= #{name},
+        set nickname= #{nickname},
             age=#{age},
             address=#{address},
             sex=#{sex},
             tel_number=#{tel_number},
             qq=#{qq},
-            account=#{account},
             password=#{password}
         where id = #{id}
     </update>
@@ -54,7 +53,7 @@
     <select id="selectUserByPage" resultType="User" resultMap="userMap">
         select * from user where 1=1
         <if test="name != null and name.trim().length() > 0">
-            and name LIKE CONCAT('%', #{name}, '%')
+            and nickname LIKE CONCAT('%', #{nickname}, '%')
         </if>
         <if test="phone != null and phone.trim().length() > 0">
             and tel_number LIKE CONCAT('%', #{phone}, '%')
@@ -102,4 +101,10 @@
         from user
         where id = #{id}
     </select>
+
+    <update id="setPassword">
+        update user
+        set password = #{newPassword}
+        where id = #{id}
+    </update>
 </mapper>

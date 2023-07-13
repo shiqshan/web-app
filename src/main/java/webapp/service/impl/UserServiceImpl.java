@@ -122,5 +122,22 @@ public class UserServiceImpl implements UserService {
         }
         return RS.error("修改失败");
     }
+
+    @Override
+    public Result setPassword(String id, String oldPassword, String newPassword) {
+        //根据id 查旧密码是否正确
+        String oldMd5 = DigestUtils.md5DigestAsHex(oldPassword.getBytes());
+        User u = userMapper.getUserById(id);
+        if (!oldMd5.equals(u.getPassword())) {
+            return RS.error(0, "旧密码不正确");
+        }
+
+        String newMd5 = DigestUtils.md5DigestAsHex(newPassword.getBytes());
+        int i = userMapper.setPassword(id, newMd5);
+        if (i <= 0) {
+            return RS.error(500, "密码修改失败");
+        }
+        return RS.success("密码修改成功");
+    }
 }
 

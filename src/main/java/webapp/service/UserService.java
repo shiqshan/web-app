@@ -22,13 +22,15 @@ public interface UserService {
     HashMap<String, String> findUserByNameAndPwd(String username, String password);
 
     //用户注册
-    Result register(String username, String password);
+    Result<?> register(String username, String password);
 
     //检查账号
-    Result isExist(String username);
+    Result<?> isExist(String username);
 
-    Result getInfoById(String userId);
+    Result<?> getInfoById(String userId);
 
-    Result update(User user);
+    Result<?> update(User user);
+
+    Result setPassword(String id, String oldPassword, String newPassword);
 
 }

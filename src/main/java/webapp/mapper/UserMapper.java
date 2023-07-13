@@ -31,4 +31,6 @@ public interface UserMapper {
     Map<String, Object> getInfoById(@Param("id") String id);
 
     int update(User user);
+
+    int setPassword(@Param("id") String id, @Param("newPassword") String newPassword);
 }

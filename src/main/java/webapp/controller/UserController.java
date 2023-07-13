@@ -5,7 +5,7 @@ import com.github.pagehelper.PageInfo;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import webapp.common.Constants;
 import webapp.common.Result;
@@ -14,8 +14,6 @@ import webapp.common.Utils;
 import webapp.pojo.User;
 import webapp.service.impl.UserServiceImpl;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -28,7 +26,7 @@ public class UserController {
     @PostMapping("/is_exist")
     public Result check(@RequestBody JSONObject body) {
         String username = body.getString("username");
-        if (StringUtils.isEmpty(username)) {
+        if (ObjectUtils.isEmpty(username)) {
             return RS.error(400, "参数错误");
         }
         return userService.isExist(username);
@@ -38,7 +36,7 @@ public class UserController {
     public Result register(@RequestBody JSONObject body) {
         String username = body.getString("username");
         String password = body.getString("password");
-        if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
+        if (ObjectUtils.isEmpty(username) || ObjectUtils.isEmpty(password)) {
             return RS.error(Constants.RESULT_CODE_PARAM_ERROR, "参数错误");
         }
         return userService.register(username, password);
@@ -52,13 +50,13 @@ public class UserController {
      * @return
      */
     @PostMapping("/login")
-    public Result<User> userLogin(HttpServletRequest request, @RequestBody JSONObject body) {
+    public Result<?> userLogin(HttpServletRequest request, @RequestBody JSONObject body) {
         String username = body.getString("username");
         String password = body.getString("password");
-        if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
+        if (ObjectUtils.isEmpty(username) || ObjectUtils.isEmpty(password)) {
             return RS.error(Constants.RESULT_CODE_PARAM_ERROR, "参数错误");
         }
-        HashMap map = userService.findUserByNameAndPwd(username, password);
+        Map map = userService.findUserByNameAndPwd(username, password);
         if (map.isEmpty()) {
             return RS.error("用户名和密码错误");
         }
@@ -75,7 +73,7 @@ public class UserController {
      * @return
      */
     @GetMapping("/logout")
-    public Result logout(HttpSession session) {
+    public Result<String> logout(HttpSession session) {
         session.removeAttribute("u_id");
         return RS.success("已退出登录");
     }
@@ -87,7 +85,7 @@ public class UserController {
      * @return
      */
     @GetMapping("/info")
-    public Result<User> getInfo(HttpSession session) {
+    public Result<?> getInfo(HttpSession session) {
         String id = (String) session.getAttribute("u_id");
         if (id == null) {
             return RS.success("用户信息不存在，请重新登录");
@@ -103,13 +101,28 @@ public class UserController {
      * @return
      */
     @PostMapping("/update_baseinfo")
-    public Result updateBaseInfo(HttpSession session, @RequestBody User user) {
+    public Result<?> updateBaseInfo(HttpSession session, @RequestBody User user) {
         String id = (String) session.getAttribute("u_id");
         if (id == null) {
-            return RS.success("用户信息不存在，请重新登录");
+            return RS.error("用户信息不存在，请重新登录");
         }
         user.setId(id);
         return userService.update(user);
+    }
+
+    @PostMapping("/set_password")
+    public Result<?> setPassword(HttpSession session,@RequestBody JSONObject body) {
+        String id = (String) session.getAttribute("u_id");
+        if (id == null) {
+            return RS.error("用户信息不存在，请重新登录");
+        }
+
+        String oldPassword = body.getString("oldPassword");
+        String newPassword = body.getString("newPassword");
+        if (ObjectUtils.isEmpty(oldPassword) || ObjectUtils.isEmpty(newPassword)) {
+            return RS.error("用户信息不存在，请重新登录");
+        }
+        return userService.setPassword(id, oldPassword, newPassword);
     }
 
     /**
@@ -136,9 +149,9 @@ public class UserController {
      * @return
      */
     @PostMapping("/insertUser")
-    public Result insertUser(@RequestBody User user) {
+    public Result<?> insertUser(@RequestBody User user) {
         System.out.println(user);
-        if (StringUtils.isEmpty(user.getUsername()) || StringUtils.isEmpty(user.getId())) {
+        if (ObjectUtils.isEmpty(user.getUsername()) || ObjectUtils.isEmpty(user.getId())) {
             return RS.error(Constants.RESULT_CODE_PARAM_ERROR, "参数错误");
         }
         int u = userService.insertUser(user);
@@ -155,7 +168,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/deleteUser")
-    public Result deleteUser(@RequestBody User user) {
+    public Result<?> deleteUser(@RequestBody User user) {
         int u = userService.deleteUser(user.getId());
         if (u > 0) {
             return RS.success();
@@ -170,8 +183,8 @@ public class UserController {
      * @return
      */
     @PostMapping("/updateUser")
-    public Result updateUser(@RequestBody User user) {
-        if (StringUtils.isEmpty(user.getId())) {
+    public Result<?> updateUser(@RequestBody User user) {
+        if (ObjectUtils.isEmpty(user.getId())) {
             return RS.error(Constants.RESULT_CODE_PARAM_ERROR, "参数错误");
         }
         int u = userService.updateUser(user);
@@ -187,18 +200,18 @@ public class UserController {
      * @return
      */
     @PostMapping("/getUserList")
-    public Result<List<User>> getUsers(@RequestBody JSONObject body) {
+    public Result getUsers(@RequestBody JSONObject body) {
         Integer page = body.getIntValue("page");
         Integer size = body.getIntValue("size");
         String name = body.getString("name");
         String phone = body.getString("tel_number");
         String sex = body.getString("sex");
-        PageInfo pageInfo = userService.getUsers(page, size, name, phone, sex);
+        PageInfo<User> pageInfo = userService.getUsers(page, size, name, phone, sex);
         return RS.success(Utils.simplePageInfo(pageInfo));
     }
 
     @GetMapping("checkSession")
-    public Result checkSession(HttpSession session) {
+    public Result<?> checkSession(HttpSession session) {
         if (session.getAttribute("u_id") == null) {
             return RS.error("未登录");
         }
