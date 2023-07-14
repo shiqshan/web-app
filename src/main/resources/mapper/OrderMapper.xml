@@ -4,15 +4,31 @@
 
     <!-- 定义 resultMap 映射 -->
     <resultMap id="OrderMap" type="Order">
-        <id property="id" column="id"/>
-        <result property="createTime" column="create_time"/>
-        <result property="uId" column="u_id"/>
-        <result property="pId" column="p_id"/>
+        <id property="orderId" column="order_id"/>
+        <id property="userId" column="user_id"/>
+        <id property="orderDate" column="order_date"/>
+        <id property="orderAmount" column="order_amount"/>
+        <id property="paymentStatus" column="payment_status"/>
+        <id property="productId" column="product_id"/>
     </resultMap>
 
-    <insert id="addOrder" parameterType="Order">
-        insert into `order` (id, u_id, p_id, create_time, pay)
-        values (null, #{uId}, #{pId}, CURRENT_TIMESTAMP, #{pay})
+    <insert id="submit" parameterType="Order">
+        insert into `order` (order_id, user_id, product_id, order_date, payment_status, order_amount)
+        values (#{orderId}, #{userId}, #{productId}, CURRENT_TIMESTAMP, 1, #{orderAmount})
     </insert>
+
+    <select id="selectOrderByPage" resultType="Order" resultMap="OrderMap">
+        select * from `order` where 1=1
+        <if test="name != null and name.trim().length() > 0">
+            and nickname LIKE CONCAT('%', #{nickname}, '%')
+        </if>
+        <if test="phone != null and phone.trim().length() > 0">
+            and tel_number LIKE CONCAT('%', #{phone}, '%')
+        </if>
+        <if test="sex != null and sex.trim().length() > 0">
+            and sex = #{sex}
+        </if>
+        -- order by order_id desc
+    </select>
 
 </mapper>

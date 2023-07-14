@@ -1,9 +1,15 @@
 package webapp.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import webapp.pojo.Order;
+
+import java.util.List;
 
 @Mapper
 public interface OrderMapper {
-    int addOrder(String uId, String pId, String pay);
+
+    int submit(Order order);
+
+    List<Order> selectOrderByPage();
 }

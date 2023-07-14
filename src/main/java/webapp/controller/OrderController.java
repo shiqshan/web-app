@@ -14,26 +14,32 @@ import webapp.common.Result;
 import webapp.pojo.Order;
 import webapp.service.impl.OrderServiceImpl;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/order")
 public class OrderController {
 
     @Autowired
-    private OrderServiceImpl heroOrderService;
+    private OrderServiceImpl orderService;
 
+    /**
+     * 购买下单
+     *
+     * @param order
+     * @return
+     */
     @PostMapping("/buy")
-    public Result addOrder(@RequestBody JSONObject body, HttpSession session) {
-        String pId = body.getString("pId");
-        String pay = body.getString("pay");
-
-        if (StringUtils.isEmpty(pId) || StringUtils.isEmpty(pay)) {
-            return RS.error(Constants.RESULT_CODE_PARAM_ERROR, "参数错误");
-        }
-        String uId = (String) session.getAttribute("u_id");
-        if (uId == null) {
-            return RS.error(Constants.RESULT_CODE_NOT_LOGIN, "未登录");
-        }
-        return heroOrderService.add(uId, pId, pay);
+    public Result<String> submit(@RequestBody Order order) {
+        return orderService.submit(order);
     }
+
+    @PostMapping("/list")
+    public Result getList(@RequestBody JSONObject body) {
+        Integer page = body.getIntValue("page");
+        Integer size = body.getIntValue("size");
+        return orderService.getOrders(page, size);
+    }
+
 
 }
