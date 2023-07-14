@@ -2,6 +2,7 @@ package webapp.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
@@ -69,17 +70,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public HashMap<String, String> findUserByNameAndPwd(String username, String password) {
+    public User login(String username, String password) {
         String pwd = DigestUtils.md5DigestAsHex(password.getBytes());
-        User u = userMapper.findUserByNameAndPwd(username, pwd);
-        HashMap<String, String> map = new HashMap();
-        if (u != null) {
-            map.put("id", u.getId());
-            map.put("username", u.getUsername());
-            map.put("nickname", u.getNickname());
-            map.put("avatar", u.getAvatar());
-        }
-        return map;
+        return userMapper.login(username, pwd);
     }
 
     @Override

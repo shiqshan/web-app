@@ -19,7 +19,7 @@ public interface UserService {
 
     PageInfo<User> getUsers(Integer page, Integer size, String name, String phone, String sex);
 
-    HashMap<String, String> findUserByNameAndPwd(String username, String password);
+    User login(String username, String password);
 
     //用户注册
     Result<?> register(String username, String password);

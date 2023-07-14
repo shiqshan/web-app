@@ -14,6 +14,7 @@ import webapp.common.Utils;
 import webapp.pojo.User;
 import webapp.service.impl.UserServiceImpl;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -56,13 +57,15 @@ public class UserController {
         if (ObjectUtils.isEmpty(username) || ObjectUtils.isEmpty(password)) {
             return RS.error(Constants.RESULT_CODE_PARAM_ERROR, "参数错误");
         }
-        Map map = userService.findUserByNameAndPwd(username, password);
-        if (map.isEmpty()) {
+        User u = userService.login(username, password);
+        if (u == null) {
             return RS.error("用户名和密码错误");
         }
         //登录通过后
         HttpSession session = request.getSession();
-        session.setAttribute("u_id", map.get("id"));
+        session.setAttribute("u_id", u.getId());
+        Map<String, String> map = new HashMap<>();
+        map.put("id", u.getId());
         return RS.success(map);
     }
 
@@ -119,6 +122,7 @@ public class UserController {
 
         String oldPassword = body.getString("oldPassword");
         String newPassword = body.getString("newPassword");
+
         if (ObjectUtils.isEmpty(oldPassword) || ObjectUtils.isEmpty(newPassword)) {
             return RS.error("用户信息不存在，请重新登录");
         }
