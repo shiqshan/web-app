@@ -87,7 +87,7 @@
         values (null, #{username}, #{password}, null, null, null, null, null, null, CURRENT_TIMESTAMP, 0)
     </insert>
 
-    <select id="getInfoById" resultType="map">
+    <select id="getInfoById" resultType="java.util.HashMap">
         select id,
                username,
                nickname,

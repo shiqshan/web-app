@@ -84,18 +84,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Result register(String username, String password) {
-        //查询账号是否存在
-        User u = userMapper.findUserByUsername(username);
-        if (u != null) {
-            return RS.error(0, "该账号已注册");
-        }
         //注册
         String md5 = DigestUtils.md5DigestAsHex(password.getBytes());
-        int i = userMapper.register(username, md5);
-        if (i > 0) {
-            return RS.success();
+        int i;
+        try {
+            //username 是唯一key，不能重复，直接注册捕获异常
+            i = userMapper.register(username, md5);
+        } catch (Exception SQLIntegrityConstraintViolationException) {
+            return RS.error(0, "该账号已注册");
         }
-        return RS.error("注册失败");
+        if (i == 0) {
+            return RS.error("注册失败");
+        }
+        return RS.success("注册成功");
     }
 
     @Override

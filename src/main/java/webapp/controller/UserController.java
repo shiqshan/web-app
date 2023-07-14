@@ -111,7 +111,7 @@ public class UserController {
     }
 
     @PostMapping("/set_password")
-    public Result<?> setPassword(HttpSession session,@RequestBody JSONObject body) {
+    public Result<?> setPassword(HttpSession session, @RequestBody JSONObject body) {
         String id = (String) session.getAttribute("u_id");
         if (id == null) {
             return RS.error("用户信息不存在，请重新登录");
