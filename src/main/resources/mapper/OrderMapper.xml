@@ -10,11 +10,13 @@
         <id property="orderAmount" column="order_amount"/>
         <id property="paymentStatus" column="payment_status"/>
         <id property="productId" column="product_id"/>
+        <id property="productInfo" column="product_info" typeHandler="webapp.handler.JsonHandler"/>
     </resultMap>
 
     <insert id="submit" parameterType="Order">
-        insert into `order` (order_id, user_id, product_id, order_date, payment_status, order_amount)
-        values (#{orderId}, #{userId}, #{productId}, CURRENT_TIMESTAMP, 1, #{orderAmount})
+        insert into `order` (order_id, user_id, product_id, product_info, order_date, payment_status, order_amount)
+        values (#{orderId}, #{userId}, #{productId}, #{productInfo, typeHandler=webapp.handler.JsonHandler},
+                CURRENT_TIMESTAMP, 1, #{orderAmount})
     </insert>
 
     <select id="selectOrderByPage" resultType="Order" resultMap="OrderMap">

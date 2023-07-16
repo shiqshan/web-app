@@ -15,6 +15,7 @@ public class Order {
     private long orderId;
     private long userId;
     private long productId;
+    private JSONObject productInfo;
     private String orderDate;
     private String paymentStatus;
     private BigDecimal orderAmount;

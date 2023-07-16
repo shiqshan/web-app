@@ -34,6 +34,12 @@ public class OrderController {
         return orderService.submit(order);
     }
 
+    /**
+     * 订单列表
+     *
+     * @param body
+     * @return
+     */
     @PostMapping("/list")
     public Result getList(@RequestBody JSONObject body) {
         Integer page = body.getIntValue("page");
