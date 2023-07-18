@@ -24,6 +24,12 @@ public class UserController {
     @Autowired
     private UserServiceImpl userService;
 
+    /**
+     * 账号是否存在
+     *
+     * @param body
+     * @return
+     */
     @PostMapping("/is_exist")
     public Result check(@RequestBody JSONObject body) {
         String username = body.getString("username");
@@ -33,6 +39,12 @@ public class UserController {
         return userService.isExist(username);
     }
 
+    /**
+     * 注册
+     *
+     * @param body
+     * @return
+     */
     @PostMapping("/register")
     public Result register(@RequestBody JSONObject body) {
         String username = body.getString("username");
@@ -113,6 +125,13 @@ public class UserController {
         return userService.update(user);
     }
 
+    /**
+     * 重置密码
+     *
+     * @param session
+     * @param body
+     * @return
+     */
     @PostMapping("/set_password")
     public Result<?> setPassword(HttpSession session, @RequestBody JSONObject body) {
         String id = (String) session.getAttribute("u_id");
@@ -127,6 +146,16 @@ public class UserController {
             return RS.error("用户信息不存在，请重新登录");
         }
         return userService.setPassword(id, oldPassword, newPassword);
+    }
+
+    @PostMapping("/set_gold")
+    public Result<?> setGold(HttpSession session, @RequestBody User user) {
+        String id = (String) session.getAttribute("u_id");
+        if (id == null) {
+            return RS.error("用户信息不存在，请重新登录");
+        }
+
+        return userService.setGold(id, user.getGold());
     }
 
     /**

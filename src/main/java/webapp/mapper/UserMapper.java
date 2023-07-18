@@ -33,4 +33,6 @@ public interface UserMapper {
     int update(User user);
 
     int setPassword(@Param("id") String id, @Param("newPassword") String newPassword);
+
+    int setGold(@Param("id") String id, @Param("newGold") int gold);
 }

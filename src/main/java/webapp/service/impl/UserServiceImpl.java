@@ -133,5 +133,14 @@ public class UserServiceImpl implements UserService {
         }
         return RS.success("密码修改成功");
     }
+
+    @Override
+    public Result setGold(String id, int gold) {
+        int i = userMapper.setGold(id, gold);
+        if (i <= 0) {
+            return RS.error("充值失败");
+        }
+        return RS.success("充值成功");
+    }
 }
 

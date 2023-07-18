@@ -33,4 +33,6 @@ public interface UserService {
 
     Result setPassword(String id, String oldPassword, String newPassword);
 
+    Result setGold(String id, int gold);
+
 }
