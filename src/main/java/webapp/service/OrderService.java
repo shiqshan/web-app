@@ -10,4 +10,8 @@ public interface OrderService {
     Result submit(Order order);
 
     Result<PageInfo<Order>> getOrders(Integer page, Integer size);
+
+    Result getDetail(String orderId);
+
+    Result doPay(Order order);
 }

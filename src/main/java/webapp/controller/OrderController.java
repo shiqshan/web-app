@@ -4,10 +4,7 @@ import com.alibaba.fastjson2.JSONObject;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import webapp.common.Constants;
 import webapp.common.RS;
 import webapp.common.Result;
@@ -29,8 +26,8 @@ public class OrderController {
      * @param order
      * @return
      */
-    @PostMapping("/buy")
-    public Result<String> submit(@RequestBody Order order) {
+    @PostMapping("/create")
+    public Result<String> create(@RequestBody Order order) {
         return orderService.submit(order);
     }
 
@@ -47,5 +44,19 @@ public class OrderController {
         return orderService.getOrders(page, size);
     }
 
+    /**
+     * 订单详情
+     * @param orderId
+     * @return
+     */
+    @GetMapping("/detail")
+    public Result<Order> getDetail(@RequestParam(value = "orderId") String orderId) {
+        return orderService.getDetail(orderId);
+    }
+
+    @PostMapping("/pay")
+    public Result<?> doPay(@RequestBody Order order) {
+        return orderService.doPay(order);
+    }
 
 }

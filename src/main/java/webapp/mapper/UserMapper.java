@@ -2,6 +2,7 @@ package webapp.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import webapp.pojo.Order;
 import webapp.pojo.User;
 
 import java.util.List;
