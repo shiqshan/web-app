@@ -14,4 +14,6 @@ public interface OrderService {
     Result getDetail(String orderId);
 
     Result doPay(Order order);
+
+    Result deleteOrderById(Order order);
 }

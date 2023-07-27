@@ -38,7 +38,7 @@ public class OrderController {
      * @return
      */
     @PostMapping("/list")
-    public Result getList(@RequestBody JSONObject body) {
+    public Result<?> getList(@RequestBody JSONObject body) {
         Integer page = body.getIntValue("page");
         Integer size = body.getIntValue("size");
         return orderService.getOrders(page, size);
@@ -50,13 +50,18 @@ public class OrderController {
      * @return
      */
     @GetMapping("/detail")
-    public Result<Order> getDetail(@RequestParam(value = "orderId") String orderId) {
+    public Result<?> getDetail(@RequestParam(value = "orderId") String orderId) {
         return orderService.getDetail(orderId);
     }
 
     @PostMapping("/pay")
     public Result<?> doPay(@RequestBody Order order) {
         return orderService.doPay(order);
+    }
+
+    @PostMapping("/delete")
+    public Result<?> delete(@RequestBody Order order) {
+        return orderService.deleteOrderById(order);
     }
 
 }

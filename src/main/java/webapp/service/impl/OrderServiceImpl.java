@@ -38,9 +38,7 @@ public class OrderServiceImpl implements OrderService {
     public String getSessionId() {
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
         //获取Session中参数
-        String id = (String) requestAttributes.getAttribute("u_id", RequestAttributes.SCOPE_SESSION);
-
-        return id;
+        return (String) requestAttributes.getAttribute("u_id", RequestAttributes.SCOPE_SESSION);
     }
 
 
@@ -69,7 +67,7 @@ public class OrderServiceImpl implements OrderService {
             return RS.error("下单失败");
         }
 
-        Map map = new HashMap();
+        Map<String, Object> map = new HashMap<>();
         map.put("orderId", orderId);
         return RS.success(map);
     }
@@ -77,7 +75,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Result getOrders(Integer page, Integer size) {
         PageHelper.startPage(page, size);
-        List<Order> orders = orderMapper.selectOrderByPage();
+        String userId = getSessionId();
+        List<Order> orders = orderMapper.selectOrderByPage(userId);
         PageInfo<Order> pageInfo = new PageInfo<>(orders);
         return RS.success(Utils.simplePageInfo(pageInfo));
     }
@@ -85,10 +84,6 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Result getDetail(String orderId) {
         String id = getSessionId();
-        if (ObjectUtils.isEmpty(id)) {
-            return RS.error("用户信息不存在，请重新登录");
-        }
-
         Order o = orderMapper.getDetail(orderId);
         return RS.success(o);
     }
@@ -96,9 +91,6 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Result doPay(Order order) {
         String id = getSessionId();
-        if (ObjectUtils.isEmpty(id)) {
-            return RS.error("用户信息不存在，请重新登录");
-        }
         //查询余额
         User user = userMapper.getUserById(id);
         BigDecimal currentGold = new BigDecimal(user.getGold());
@@ -113,6 +105,15 @@ public class OrderServiceImpl implements OrderService {
             return RS.error("支付失败");
         }
         return RS.success("支付成功");
+    }
+
+    @Override
+    public Result deleteOrderById(Order order) {
+        int i = orderMapper.deleteOrderById(order.getOrderId());
+        if (i <= 0) {
+            return RS.error("订单删除失败");
+        }
+        return RS.success("订单已成功");
     }
 
 
