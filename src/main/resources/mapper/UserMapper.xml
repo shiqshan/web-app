@@ -52,8 +52,8 @@
 
     <select id="selectUserByPage" resultType="User" resultMap="userMap">
         select * from user where 1=1
-        <if test="name != null and name.trim().length() > 0">
-            and nickname LIKE CONCAT('%', #{nickname}, '%')
+        <if test="username != null and username.trim().length() > 0">
+            and username LIKE CONCAT('%', #{username}, '%')
         </if>
         <if test="phone != null and phone.trim().length() > 0">
             and tel_number LIKE CONCAT('%', #{phone}, '%')

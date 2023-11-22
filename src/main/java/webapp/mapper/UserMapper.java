@@ -19,7 +19,7 @@ public interface UserMapper {
 
     int updateUser(User user);
 
-    List<User> selectUserByPage(@Param("name") String name, @Param("phone") String phone, @Param("sex") String sex);
+    List<User> selectUserByPage(@Param("username") String username, @Param("phone") String phone, @Param("sex") String sex);
 
     User login(String username, String password);
 

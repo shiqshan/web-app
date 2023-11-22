@@ -236,10 +236,10 @@ public class UserController {
     public Result getUsers(@RequestBody JSONObject body) {
         Integer page = body.getIntValue("page");
         Integer size = body.getIntValue("size");
-        String name = body.getString("name");
+        String username = body.getString("username");
         String phone = body.getString("tel_number");
         String sex = body.getString("sex");
-        PageInfo<User> pageInfo = userService.getUsers(page, size, name, phone, sex);
+        PageInfo<User> pageInfo = userService.getUsers(page, size, username, phone, sex);
         return RS.success(Utils.simplePageInfo(pageInfo));
     }
 
